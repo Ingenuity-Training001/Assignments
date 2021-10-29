@@ -56,7 +56,7 @@ function handleGuess(chosenLetter) {
 }
 
 function updateHangmanPicture() {
-  document.getElementById('hangmanPic').src =  mistakes + '.jpg';
+  document.getElementById('hangmanPic').src =`img/`+ mistakes + '.jpg';
 }
 
 function checkIfGameWon() {
@@ -85,7 +85,7 @@ function updateMistakes() {
 function reset() {
   mistakes = 0;
   guessed = [];
-  document.getElementById('hangmanPic').src = '0.jpg';
+  document.getElementById('hangmanPic').src = 'img/0.jpg';
 
   randomWord();
   guessedWord();
