@@ -1,140 +1,100 @@
-let modal = document.getElementById('modal');
- let close = document.getElementById('close');
- let rules = document.getElementById('rules');
- let words = ["grain", "wheat", "train", "plane", "car", "dog", "var", "let", "const", "group", "learn", "sweat", "orange", "host", "list", "group", "word", "role", "alien", "ufo", "space", "bread", "destroy", "humans"];
- let randomWord = Math.floor(Math.random() * words.length);
- let chosenWord = words[randomWord];
- let arrWord = chosenWord.split(", ");
- let rightWord = [];
- let wrongWord = [];
- let underScore = [];
- let guessAmount = 7;
- let domUnderScore = document.getElementsByClassName('underscore');
- let domRightGuess = document.getElementsByClassName('rightguess');
- let domWrongGuess = document.getElementsByClassName('wrongguess');
+var programming_languages = [
+	"python",
+	"javascript",
+	"mongodb",
+	"json",
+	"java",
+	"html",
+	"css",
+	"c",
+	"csharp",
+	"golang",
+	"kotlin",
+	"php",
+	"sql",
+	"ruby"
+]
 
+let answer = '';
+let maxWrong = 6;
+let mistakes = 0;
+let guessed = [];
+let wordStatus = null;
 
+function randomWord() {
+  answer = programming_languages[Math.floor(Math.random() * programming_languages.length)];
+}
 
-let base = document.getElementById('base');
-let pic1 = document.getElementById('gallow1');
-let pic2 = document.getElementById('gallow2');
-let pic3 = document.getElementById('gallow3');
-let pic4 = document.getElementById('gallow4');
-let pic5 = document.getElementById('gallow5');
-let pic6 = document.getElementById('gallow6');
+function generateButtons() {
+  let buttonsHTML = 'abcdefghijklmnopqrstuvwxyz'.split('').map(letter =>
+    `
+      <button
+        class="btn btn-lg btn-primary m-2"
+        id='` + letter + `'
+        onClick="handleGuess('` + letter + `')"
+      >
+        ` + letter + `
+      </button>
+    `).join('');
 
+  document.getElementById('keyboard').innerHTML = buttonsHTML;
+}
 
- //create underscore based on length of words
- let generateUnderScore = () => 
-    {
-     for(let i = 0; i < chosenWord.length; i++){
-         underScore.push("_");
-        }
-        return underScore;
-    }
-    
-    generateUnderScore();
-  
+function handleGuess(chosenLetter) {
+  guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
+  document.getElementById(chosenLetter).setAttribute('disabled', true);
 
+  if (answer.indexOf(chosenLetter) >= 0) {
+    guessedWord();
+    checkIfGameWon();
+  } else if (answer.indexOf(chosenLetter) === -1) {
+    mistakes++;
+    updateMistakes();
+    checkIfGameLost();
+    updateHangmanPicture();
+  }
+}
 
-//-------------------------------------------------------------Main Game--------------------------------------------------------//
-document.addEventListener('keypress', (event) => {
-    
-    
-            let keyword = String.fromCharCode(event.keyCode);
-            console.log("the keyword is: " + keyword);
-        //if Users guess is right
-                    if(chosenWord.indexOf(keyword) > -1)
-                    {
-                     
-                            rightWord.push(keyword);
-                       
-                    }else
-                                {
-                                    wrongWord.push(keyword);
-                                    guessAmount -= 1;
-                                  
-                                }
-            //replace underscore with right or wrong letter
-                                                    underScore[chosenWord.indexOf(keyword)] = keyword;
-                                                    domUnderScore[0].innerHTML = underScore.join(' ');
-                                                    domRightGuess[0].innerHTML = rightWord;
-                                                    domWrongGuess[0].innerHTML = wrongWord;
-                                                  console.log("keyword in replace un score: " + keyword);
-                                                  console.log("rightword in replace un score: " + rightWord);
-                                                  console.log("wrongword in replace un score: " + wrongWord);
-                
-                //check to see if user word matches guess
-                let checkWin = () => 
-                {
-                    // value
-                    if(underScore.value === chosenWord.value && rightWord.length === chosenWord.length)
-                    {
-                        setTimeout(function(){alert('you win')}, 100);
-                        return;
-                    }
-                    if(guessAmount <= 0)
-                    {
-                        setTimeout(function(){alert('you lose')}, 500);
-                    }
-                }
-               
-                changePic();
-                checkWin();
-            });
-            
-            console.log(chosenWord);
+function updateHangmanPicture() {
+  document.getElementById('hangmanPic').src =  mistakes + '.jpg';
+}
 
+function checkIfGameWon() {
+  if (wordStatus === answer) {
+    document.getElementById('keyboard').innerHTML = 'You Won!!!';
+  }
+}
 
-            let changePic = () => 
-            {
-                // I would think about how you could DRY this up!
-                    if(guessAmount === 5)
-                    {
-                        base.style.display = 'none';
-                        pic1.style.display = 'block';
+function checkIfGameLost() {
+  if (mistakes === maxWrong) {
+    document.getElementById('wordSpotlight').innerHTML = 'The answer was: ' + answer;
+    document.getElementById('keyboard').innerHTML = 'You Lost!!!';
+  }
+}
 
-                    }
-                    if(guessAmount === 4)
-                    {
-                        pic1.style.display = 'none';
-                        pic2.style.display = 'block';
+function guessedWord() {
+  wordStatus = answer.split('').map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ ")).join('');
 
-                    }
-                    if(guessAmount === 3)
-                    {
-                        pic2.style.display = 'none';
-                        pic3.style.display = 'block';
+  document.getElementById('wordSpotlight').innerHTML = wordStatus;
+}
 
-                    }
-                    if(guessAmount === 2)
-                    {
-                        pic3.style.display = 'none';
-                        pic4.style.display = 'block';
+function updateMistakes() {
+  document.getElementById('mistakes').innerHTML = mistakes;
+}
 
-                    }
-                    if(guessAmount === 1)
-                    {
-                        pic4.style.display = 'none';
-                        pic5.style.display = 'block';
+function reset() {
+  mistakes = 0;
+  guessed = [];
+  document.getElementById('hangmanPic').src = '0.jpg';
 
-                    }
-                    if(guessAmount === 0)
-                    {
-                        pic5.style.display = 'none';
-                        pic6.style.display = 'block';
-                        pic6.style.zIndex = 2;
-                    }
-                    
-            }
+  randomWord();
+  guessedWord();
+  updateMistakes();
+  generateButtons();
+}
 
+document.getElementById('maxWrong').innerHTML = maxWrong;
 
-                
-rules.addEventListener('click', () => {modal.style.display = 'block'});
-                
-                
-close.addEventListener('click', () => {modal.style.display = 'none'});
-                   
-                    
-                    
-                    
+randomWord();
+generateButtons();
+guessedWord();
