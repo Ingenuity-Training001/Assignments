@@ -18,7 +18,7 @@ const ball = {
     velocityX : 5,
     velocityY : 5,
     speed : 7,
-    color : "WHITE"
+    color : "ORANGE"
 }
 
 const user = {
