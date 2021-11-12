@@ -1,8 +1,13 @@
-var canvas,
-    context,
-    dragging = false,
-    dragStartLocation,
-    snapshot;
+var canvas=false,
+ context=false, 
+ dragging = false,
+ dragStartLocation,
+ snapshot;
+
+context.font = "30px Comic Sans MS";
+context.fillStyle = "red";
+context.textAlign = "center";
+context.fillText("Hello World", canvas.width/2, canvas.height/2);
 
 function getCanvasCoordinates(event) {
     var x = event.clientX - canvas.getBoundingClientRect().left,
@@ -10,7 +15,6 @@ function getCanvasCoordinates(event) {
 
     return {x: x, y: y};
 }
-
 
 function takeSnapshot() {
     snapshot = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -103,7 +107,7 @@ function dragStop(event) {
 
 function changeLineWidth() {
     context.lineWidth = this.value;
-    event.stopPropagation();
+   event.stopPropagation();
 }
 
 function changeFillStyle() {
