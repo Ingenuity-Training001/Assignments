@@ -3,8 +3,8 @@ export class Alien extends Sprite {
   public direction: number;
   public turningSpeed: number;
   public speed: number;
-
-  public updatePosition(): void {
+  public updatePosition(tick:number): void {
+    this.scale.y=0.95+Math.sin(tick) * 0.05
     this.direction += this.turningSpeed * 0.01;
     this.x += Math.sin(this.direction) * this.speed;
     this.y += Math.cos(this.direction) * this.speed;

@@ -1,15 +1,22 @@
-import { Application, Sprite, Rectangle } from "pixi.js";
+import { Application, ParticleContainer,Rectangle } from "pixi.js";
 import { Alien } from "./Alien";
-const app = new Application({
+const app:Application = new Application({
   width: 1280,
   height: 720,
 });
 document.body.appendChild(app.view);
+const sprites:ParticleContainer = new ParticleContainer(10000, {
+  scale: true,
+  position: true,
+  rotation: true,
+  uvs: true,
+  alpha: true,
+});
 
+app.stage.addChild(sprites);
 const aliens: Alien[] = [];
 
-const totalDudes = 20;
-
+const totalDudes:number = 20;
 app.loader
   .add("bunny", "https://pixijs.io/examples/examples/assets/bunny.png")
   .add("egghead", "https://pixijs.io/examples/examples/assets/eggHead.png")
@@ -19,7 +26,7 @@ app.loader
   )
   .load((l, r) => {
     for (let i = 0; i < totalDudes; i++) {
-      const dude = new Alien(r["monsters"].texture);
+      const dude:Alien = new Alien(r["monsters"].texture);
       dude.anchor.set(0.5);
       dude.scale.set(0.8 + Math.random() * 0.3);
 
@@ -33,7 +40,7 @@ app.loader
       dude.speed = 2 + Math.random() * 2;
 
       aliens.push(dude);
-      app.stage.addChild(dude);
+      sprites.addChild(dude);
     }
     const dudeBoundsPadding = 100;
 
@@ -43,15 +50,16 @@ app.loader
       app.screen.width + dudeBoundsPadding * 2,
       app.screen.height + dudeBoundsPadding * 2
     );
-
+    let tick=0;
     app.ticker.add(() => {
       // iterate through the dudes and update their position
       for (let i = 0; i < aliens.length; i++) {
         const dude = aliens[i];
-        dude.updatePosition();
+        dude.updatePosition(tick);
 
         // wrap the dudes by testing their bounds...
         dude.checkCollisionBounds(dudeBounds);
       }
+      tick+=0.1
     });
   });
