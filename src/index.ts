@@ -3,12 +3,14 @@ import * as particles from "@pixi/particle-emitter"
 const app = new Application({
     width: 1300,
     height: 560,
+    view: document.getElementById("my-canvas") as HTMLCanvasElement,
+    backgroundColor:0x001f,
     antialias: true,
     resolution:1
 })
 
 
-document.body.appendChild(app.view)
+// document.body.appendChild(app.view)
 
 app.loader.add("gold-coins", "https://pixijs.io/particle-emitter/examples/images/gold_anim.json")
 .add('pop', "https://pixijs.io/particle-emitter/examples/images/pop_anim.json")
