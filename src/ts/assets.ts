@@ -8,7 +8,7 @@ export default {
     
     {
       key: 'gameBG',
-      url: 'img/baseGame/Basegame_BG2.png',
+      url: 'img/baseGame/Basegame_BG2.jpg',
     },
     {
       key: 'winBox',
